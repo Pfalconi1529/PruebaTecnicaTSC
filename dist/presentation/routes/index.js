@@ -3,7 +3,10 @@
  */
 import { Router } from "express";
 import { readdirSync } from "fs";
-const PATH_ROUTER = `${__dirname}`;
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const PATH_ROUTER = path.join(path.dirname(__filename));
 const router = Router();
 const cleanFileName = (fileName) => {
     const file = fileName.split(".").shift();
@@ -12,8 +15,11 @@ const cleanFileName = (fileName) => {
 readdirSync(PATH_ROUTER).filter((fileName) => {
     const cleanName = cleanFileName(fileName);
     if (cleanName !== "index") {
-        import(`./${cleanName}`).then((moduleRouter) => {
+        import(`./${cleanName}.js`).then((moduleRouter) => {
             router.use(`/${cleanName}`, moduleRouter.router);
+        })
+            .catch(error => {
+            console.error(`Error al cargar la ruta ${cleanName}:`, error.message);
         });
     }
 });

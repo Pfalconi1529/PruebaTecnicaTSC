@@ -16,14 +16,13 @@ const cleanFileName = (fileName: string) => {
     return file;
 }
 
-// src/presentation/routes/index.ts (SOLUCIÓN FINAL)
 
 readdirSync(PATH_ROUTER).filter((fileName) => {
     const cleanName = cleanFileName(fileName);
   
     
     if(cleanName !== "index"){
-        import(`./${cleanName}.ts`).then((moduleRouter) => {
+        import(`./${cleanName}.js`).then((moduleRouter) => {
             router.use(`/${cleanName}`, moduleRouter.router)
         })
         .catch(error => {

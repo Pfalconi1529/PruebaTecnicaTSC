@@ -1,14 +1,27 @@
-// src/domain/services/devOpsService.ts
-const responseMessage = (body) => {
-    const { to } = body;
-    let res;
-    if (!body || !to) {
-        res = "Estimado usuario faltan campos por llenar.";
+import { generateUniqueTransactionJwt } from "../../infrastructure/utils/jwtGenerator.js";
+import { isUsed, markAsUsed } from "../../infrastructure/cache/jwtCache.js";
+import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from "../../infrastructure/context/envVariables.js";
+const responseMessage = (payload, transactionId) => {
+    if (transactionId) {
+        if (isUsed(transactionId)) {
+            return {
+                message: TOKEN_DUPLICATE,
+            };
+        }
     }
-    else {
-        res = `Hola ${to}, tu mensaje será enviado`;
+    const { to } = payload;
+    if (!payload || !to) {
+        return { message: ERR_MISSING_FIELDS };
     }
-    return { message: res };
+    if (transactionId) {
+        markAsUsed(transactionId);
+    }
+    const newToken = generateUniqueTransactionJwt();
+    const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
+    return {
+        message: successMessage,
+        newJwt: newToken
+    };
 };
 export { responseMessage };
 //# sourceMappingURL=devOpsService.js.map

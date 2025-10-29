@@ -6,5 +6,6 @@ export interface MessagePayload {
 }
 export interface MessageResponse {
     message: string;
+    newJwt?: string;
 }
 //# sourceMappingURL=devOpsInterface.d.ts.map

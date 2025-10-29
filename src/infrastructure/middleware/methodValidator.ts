@@ -1,7 +1,7 @@
 // src/infrastructure/middleware/methodValidator.ts
 
 import type { Request, Response, NextFunction } from 'express';
-import { ERR_GENERIC_METHOD } from '../context/envVariables.ts';
+import { ERR_GENERIC_METHOD } from '../context/envVariables.js';
 
 const checkHttpMethod = (req: Request, res: Response, next: NextFunction) => {
     

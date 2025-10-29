@@ -1,0 +1,1 @@
+{"version":3,"file":"checkUrlOrHeader.d.ts","sourceRoot":"","sources":["../../../src/infrastructure/middleware/checkUrlOrHeader.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAEjD,QAAA,MAAM,eAAe,GAAI,KAAK,OAAO,EAAE,KAAK,QAAQ,uCAOnD,CAAC;AAEF,OAAO,EAAE,eAAe,EAAE,CAAC"}

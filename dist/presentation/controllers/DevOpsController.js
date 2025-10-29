@@ -1,12 +1,14 @@
 import { responseMessage } from "../../domain/services/devOpsService.js";
-const postMessage = async ({ body }, res) => {
+import { handleHttp } from "../../infrastructure/utils/utils.js";
+const postMessage = async (req, res) => {
     try {
-        const dataMessage = responseMessage(body);
-        res.status(200).send(dataMessage);
+        const transactionId = req.transactionId;
+        const payload = req.body;
+        const responseData = responseMessage(payload, transactionId);
+        res.status(200).send(responseData);
     }
     catch (error) {
-        // Delegar el error a la función de manejo HTTP
-        //handleHttp(res, error as Error);
+        handleHttp(res, error);
     }
 };
 export { postMessage };

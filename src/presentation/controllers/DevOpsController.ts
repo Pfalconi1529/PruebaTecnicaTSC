@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { responseMessage } from "../../domain/services/devOpsService.ts";
-import { handleHttp } from "../../infrastructure/utils/utils.ts";
+import { responseMessage } from "../../domain/services/devOpsService.js";
+import { handleHttp } from "../../infrastructure/utils/utils.js";
 
 
 

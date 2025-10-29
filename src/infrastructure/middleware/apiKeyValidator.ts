@@ -1,7 +1,7 @@
 
 
 import type { Request, Response, NextFunction } from 'express';
-import { ERR_INVALID_AUTH, HEADER_KEY } from '../context/envVariables.ts';
+import { ERR_INVALID_AUTH, HEADER_KEY } from '../context/envVariables.js';
 
 const VALID_API_KEY = process.env.DEV_OPS_API_KEY; 
 

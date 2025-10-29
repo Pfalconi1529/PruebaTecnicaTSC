@@ -1,8 +1,8 @@
-// src/infrastructure/utils/jwtGenerator.ts
+
 
 import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid'; // Necesitas instalar 'uuid'
-import { JWT_TRANSACTION_SECRET } from '../context/envVariables.ts';
+import { v4 as uuidv4 } from 'uuid'; 
+import { JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
 
 
 const generateUniqueTransactionJwt = (): string => {
@@ -17,7 +17,7 @@ const generateUniqueTransactionJwt = (): string => {
     const token = jwt.sign(
         payload, 
         JWT_TRANSACTION_SECRET,
-        { expiresIn: '5m' } // Válido por 5 minutos
+        { expiresIn: '5m' } 
     );
     
     return token;

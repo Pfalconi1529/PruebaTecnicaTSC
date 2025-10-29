@@ -1,7 +1,7 @@
 // src/infrastructure/middleware/jwtValidator.ts
 
 import type { Request, Response, NextFunction } from 'express';
-import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from '../context/envVariables.ts';
+import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
 import  jwt  from 'jsonwebtoken';
 
 

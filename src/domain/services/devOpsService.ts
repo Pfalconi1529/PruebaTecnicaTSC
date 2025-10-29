@@ -1,7 +1,7 @@
 import type { MessagePayload, MessageResponse } from "../interfaces/devOpsInterface.ts";
-import { generateUniqueTransactionJwt } from "../../infrastructure/utils/jwtGenerator.ts"; 
-import { isUsed, markAsUsed } from "../../infrastructure/cache/jwtCache.ts";
-import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from "../../infrastructure/context/envVariables.ts";
+import { generateUniqueTransactionJwt } from "../../infrastructure/utils/jwtGenerator.js"; 
+import { isUsed, markAsUsed } from "../../infrastructure/cache/jwtCache.js";
+import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from "../../infrastructure/context/envVariables.js";
 
 const responseMessage = (payload: MessagePayload, transactionId?: string): MessageResponse => { 
 
