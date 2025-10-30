@@ -1,4 +1,4 @@
-# 4. Deployment (Despliegue con 2 Nodos/Réplicas)
+# 4. Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
