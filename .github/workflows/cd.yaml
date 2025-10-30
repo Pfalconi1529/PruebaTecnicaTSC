@@ -12,8 +12,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    # Define un entorno de despliegue (opcional pero buena práctica)
     environment: production 
     
     steps:
