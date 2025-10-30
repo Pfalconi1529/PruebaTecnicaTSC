@@ -6,7 +6,6 @@ metadata:
   labels:
     app: devops-app
 spec:
-  # Requisito: Balanceador de carga con al menos dos nodos (réplicas).
   replicas: 2 
   selector:
     matchLabels:
@@ -18,14 +17,12 @@ spec:
     spec:
       containers:
       - name: devops-app-container
-        # Asegúrate de reemplazar con tu imagen de Docker Hub
         image: pfalck/devopstest
         ports:
         - containerPort: 3000
         env:
-          # --- Variables de ConfigMap (No Sensibles) ---
           - name: NODE_ENV
-            value: production # Configuración de ambiente por defecto
+            value: production 
           - name: APP_PORT
             valueFrom:
               configMapKeyRef:
@@ -76,7 +73,6 @@ spec:
               configMapKeyRef:
                 name: devops-app-config
                 key: TOKEN_DUPLICATE
-          # Variables de cabecera (cargadas consistentemente desde ConfigMap)
           - name: HEADER_JWT
             valueFrom:
               configMapKeyRef:
@@ -87,7 +83,6 @@ spec:
               configMapKeyRef:
                 name: devops-app-config
                 key: HEADER_KEY
-          # --- Variables de Secret (Sensibles) ---
           - name: DEV_OPS_API_KEY
             valueFrom:
               secretKeyRef:
@@ -98,10 +93,9 @@ spec:
               secretKeyRef:
                 name: devops-app-secret
                 key: JWT_TRANSACTION_SECRET
-        # Montar el PersistentVolumeClaim (si se utiliza)
         volumeMounts:
           - name: devops-app-storage
-            mountPath: /app/data # Punto de montaje dentro del contenedor
+            mountPath: /app/data 
       volumes:
         - name: devops-app-storage
           persistentVolumeClaim:

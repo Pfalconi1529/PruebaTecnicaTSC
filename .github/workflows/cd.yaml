@@ -10,7 +10,7 @@ env:
   CLUSTER_NAME: devops-eks-cluster
   DOCKER_REPO: pfalck/devopstest
   IMAGE_TAG: latest
-  K8S_DIR: ./kubernetes  # Carpeta con tus manifiestos
+  K8S_DIR: ./kubernetes
 
 jobs:
   deploy:
