@@ -38,8 +38,8 @@ jobs:
             kubernetes/app-deployment.yaml
             kubernetes/app-service.yaml
           namespace: default 
-          action: deploy # Esto ejecuta 'kubectl apply'
+          action: deploy 
           
       - name: Verify Deployment Status
-        # Verifica que el despliegue haya sido exitoso antes de terminar el workflow
+  
         run: kubectl rollout status deployment/devops-app-deployment
