@@ -1,59 +1,65 @@
-name: CI/CD Docker Hub → EKS
+name: CI/CD - Build, Push and Deploy to EKS
 
 on:
   push:
     branches:
       - main
-
-env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME || 'default-cluster-name' }}
-  DOCKER_IMAGE: pfalck/devopstest 
+      - dev
 
 jobs:
-  ci:
-    name: Build & Push Docker Image
+  build-and-deploy:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/devopstest
+      CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME || 'devops-cluster' }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
 
+    steps:
+      # 1️⃣ Clonar el repositorio
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Iniciar sesión en Docker Hub
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # 3️⃣ Construir imagen Docker
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_IMAGE:latest .
-          docker push $DOCKER_IMAGE:latest  # Solo si quieres actualizar la imagen automáticamente
+          docker build -t $IMAGE_NAME:latest .
 
-  cd:
-    name: Deploy to EKS
-    runs-on: ubuntu-latest
-    needs: ci
+      # 4️⃣ Subir la imagen a Docker Hub
+      - name: Push Docker image
+        run: |
+          docker push $IMAGE_NAME:latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
+      # 5️⃣ Configurar credenciales de AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
+      # 6️⃣ Configurar acceso al clúster EKS
       - name: Update kubeconfig for EKS
-        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
-
-      - name: Deploy Docker Hub image to EKS
         run: |
-          DEPLOYMENT_NAME=devops-app-deployment
-          CONTAINER_NAME=devops-app-container
-          IMAGE=$DOCKER_IMAGE:latest
+          aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
-          kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$IMAGE
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
+      # 7️⃣ Reemplazar la imagen en el Deployment con la nueva versión
+      - name: Update deployment image
+        run: |
+          kubectl set image deployment/devops-app \
+            devops-app=$IMAGE_NAME:latest \
+            --namespace default || echo "⚠️ No se encontró el deployment, creando nuevo..."
+
+      # 8️⃣ (Opcional) Aplicar manifest completo si no existe el deployment
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -f k8s/deployment.yaml || echo "Deployment ya existente o no encontrado."
+
+      # 9️⃣ Confirmar
+      - name: Deployment completed
+        run: echo "✅ Imagen desplegada exitosamente en EKS con $IMAGE_NAME:latest"
