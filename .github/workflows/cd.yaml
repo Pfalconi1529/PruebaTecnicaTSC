@@ -18,7 +18,7 @@ jobs:
     
     steps:
       - name: Checkout Code
-        # Obtiene el código, necesario para acceder a los manifiestos de Kubernetes
+        
         uses: actions/checkout@v4
       - name: Set up Kubeconfig Context
         uses: azure/k8s-set-context@v4
