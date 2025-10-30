@@ -1,4 +1,4 @@
-// src/infrastructure/middleware/jwtValidator.ts
+// validacion de jwt para las rutas 
 import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
 import jwt from 'jsonwebtoken';
 const checkJwtTransaction = (req, res, next) => {
@@ -11,12 +11,9 @@ const checkJwtTransaction = (req, res, next) => {
     }
     try {
         const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET);
-        console.log(decoded);
         req.transactionId = decoded.jti;
-        console.log("decodificado", req.transactionId);
     }
     catch (error) {
-        console.error("JWT Invalido o expirado", error.message);
         return res.status(401).send({ message: ERROR_TOKEN });
     }
     next();

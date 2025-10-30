@@ -1,3 +1,6 @@
+//crea los endpoints 
+
+
 import { Router } from "express";
 import { postMessage } from "../controllers/DevOpsController.js";
 import { checkHttpMethod } from "../../infrastructure/middleware/methodValidator.js";
@@ -8,7 +11,7 @@ import { checkJwtTransaction } from "../../infrastructure/middleware/jwtValidato
 const router = Router();
 
 router.post(
-  "/devOps", checkJwtTransaction, checkHttpMethod, checkApiKey, postMessage
+  "/devOps",checkJwtTransaction,checkHttpMethod, checkApiKey,postMessage
 );
 
 export { router };

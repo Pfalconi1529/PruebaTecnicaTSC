@@ -1,3 +1,4 @@
+//crea los endpoints 
 import { Router } from "express";
 import { postMessage } from "../controllers/DevOpsController.js";
 import { checkHttpMethod } from "../../infrastructure/middleware/methodValidator.js";

@@ -3,6 +3,8 @@ import { generateUniqueTransactionJwt } from "../../infrastructure/utils/jwtGene
 import { isUsed, markAsUsed } from "../../infrastructure/cache/jwtCache.js";
 import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from "../../infrastructure/context/envVariables.js";
 
+// logica para el mensaje y las validaciones
+
 const responseMessage = (payload: MessagePayload, transactionId?: string): MessageResponse => { 
 
     

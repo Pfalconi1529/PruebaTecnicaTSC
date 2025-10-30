@@ -1,4 +1,4 @@
-
+//verifica la url para que no pase otras rutas 
 
 import type { Request, Response } from 'express';
 

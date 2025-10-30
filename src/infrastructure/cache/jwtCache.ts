@@ -1,4 +1,6 @@
 
+// simula cache para identificar los jwt que ya fueron usados 
+
 const usedTransactionIds = new Set<string>();
 
 const markAsUsed = (jti: string): void => {

@@ -1,4 +1,4 @@
-
+//interface para dar formato a la respuesta y a lo que viene 
 
 export interface MessagePayload {
     message: string;

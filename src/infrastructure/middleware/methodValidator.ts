@@ -1,4 +1,4 @@
-// src/infrastructure/middleware/methodValidator.ts
+// valida el metodo http que se usa 
 
 import type { Request, Response, NextFunction } from 'express';
 import { ERR_GENERIC_METHOD } from '../context/envVariables.js';

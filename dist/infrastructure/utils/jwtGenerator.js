@@ -1,3 +1,4 @@
+// genera el jwt 
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { JWT_TRANSACTION_SECRET } from '../context/envVariables.js';

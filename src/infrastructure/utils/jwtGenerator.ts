@@ -1,4 +1,4 @@
-
+// genera el jwt 
 
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid'; 
@@ -17,7 +17,7 @@ const generateUniqueTransactionJwt = (): string => {
     const token = jwt.sign(
         payload, 
         JWT_TRANSACTION_SECRET,
-        { expiresIn: '5m' } 
+        { expiresIn: '60m' } 
     );
     
     return token;

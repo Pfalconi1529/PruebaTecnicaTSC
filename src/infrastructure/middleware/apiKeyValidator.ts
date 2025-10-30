@@ -1,4 +1,5 @@
 
+// valida la key del header
 
 import type { Request, Response, NextFunction } from 'express';
 import { ERR_INVALID_AUTH, HEADER_KEY } from '../context/envVariables.js';

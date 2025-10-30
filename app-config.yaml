@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-app-config
+  labels:
+    app: devops-app
+data:
+  APP_PORT: "3000"
+  ERR_GENERIC_METHOD: "ERROR" 
+  ERR_INVALID_AUTH: "Error: Clave de autenticación inválida o faltante (API Key)." 
+  ERR_MISSING_FIELDS: "Estimado usuario faltan campos por llenar."
+  SUCCESS_GREETING: "Hola "
+  SUCCESS_SUFFIX: ", tu mensaje será enviado"
+  HEADER_JWT: "x-jwt-kwy"
+  HOST: "http://localhost:3000"
+  ERR_MISSING_JWT: "Error no existe el token"
+  ERROR_TOKEN: "Token de transacción inválido o expirado."
+  TOKEN_DUPLICATE: "Este token de transacción ya fue utilizado."
+  HEADER_KEY: "x-parse-rest-api-key"

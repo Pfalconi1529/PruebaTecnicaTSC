@@ -1,6 +1,4 @@
-/**
- * todo: Manejador de errores
- */
+// manejo de errores
 
 import type { Response } from "express";
 
