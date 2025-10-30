@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - dev # 💡 Ahora se dispara también con push a la rama 'dev'
       
 # El job principal para el despliegue
 jobs:
@@ -34,12 +35,17 @@ jobs:
         # Utiliza la acción de Kubernetes para aplicar los manifiestos YAML
         uses: azure/k8s-deploy@v4
         with:
-          # 💡 AJUSTE CLAVE: Apuntamos a todos los archivos YAML en la carpeta
-          # El asterisco (*) procesará deployment.yaml, service.yaml, etc.
-          manifests: kubernetes/*.yaml
+          # 💡 AJUSTE CLAVE: Listado explícito de todos los archivos YAML.
+          # Esto evita el error de "no such file or directory" causado por el globbing (*).
+          manifests: |
+            kubernetes/app-config.yaml
+            kubernetes/app-secret.yaml
+            kubernetes/app-pv-pvc.yaml
+            kubernetes/app-deployment.yaml
+            kubernetes/app-service.yaml
           namespace: default 
           action: deploy # Esto ejecuta 'kubectl apply'
           
       - name: Verify Deployment Status
         # Verifica que el despliegue haya sido exitoso antes de terminar el workflow
-        run: kubectl rollout status deployment/devops-api-deployment
+        run: kubectl rollout status deployment/devops-app-deployment
