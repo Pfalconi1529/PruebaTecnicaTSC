@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "target": "esnext",
     "lib": ["ES2022"],
-    "types": ["jest","node"],
+    "types": ["node"],
     //"noEmit": false,
     //"allowImportingTsExtensions": false,
     // For nodejs:
