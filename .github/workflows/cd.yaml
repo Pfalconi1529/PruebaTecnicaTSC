@@ -30,8 +30,7 @@ jobs:
         # Utiliza la acción de Kubernetes para aplicar los manifiestos YAML
         uses: azure/k8s-deploy@v4
         with:
-          # 💡 AJUSTE CLAVE: Listado explícito de todos los archivos YAML.
-          # Esto evita el error de "no such file or directory" causado por el globbing (*).
+        
           manifests: |
             kubernetes/app-config.yaml
             kubernetes/app-secret.yaml
