@@ -8,7 +8,7 @@ const generateUniqueTransactionJwt = () => {
         jti: transactionId,
         iat: Date.now(),
     };
-    const token = jwt.sign(payload, JWT_TRANSACTION_SECRET, { expiresIn: '5m' });
+    const token = jwt.sign(payload, JWT_TRANSACTION_SECRET, { expiresIn: '60m' });
     return token;
 };
 export { generateUniqueTransactionJwt };
