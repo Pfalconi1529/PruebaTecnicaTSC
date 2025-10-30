@@ -22,7 +22,6 @@ const checkJwtTransaction = (req: Request, res: Response, next: NextFunction) =>
 
         const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET) as { jti: string, iat: number };
         (req as any).transactionId = decoded.jti; 
-        console.log(decoded);
     } catch (error) {
         return res.status(401).send({ message: ERROR_TOKEN });
     }
