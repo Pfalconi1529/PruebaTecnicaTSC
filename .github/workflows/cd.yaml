@@ -47,6 +47,19 @@ jobs:
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
 
+      - name: Create EKS cluster if it doesn't exist
+        run: |
+          if ! aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION >/dev/null 2>&1; then
+            echo "Cluster $CLUSTER_NAME not found. Creating..."
+            eksctl create cluster \
+              --name $CLUSTER_NAME \
+              --region $AWS_REGION \
+              --nodes 2 \
+              --managed
+          else
+            echo "Cluster $CLUSTER_NAME already exists."
+          fi
+
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
