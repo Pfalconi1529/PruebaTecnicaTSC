@@ -20,11 +20,6 @@ jobs:
       - name: Checkout Code
         # Obtiene el código, necesario para acceder a los manifiestos de Kubernetes
         uses: actions/checkout@v4
-
-      # ====================================================================
-      # 🔑 CRÍTICO: Configuración de Acceso a Kubernetes
-      # El secreto KUBE_CONFIG_DATA debe estar configurado en GitHub
-      # ====================================================================
       - name: Set up Kubeconfig Context
         uses: azure/k8s-set-context@v4
         with:
