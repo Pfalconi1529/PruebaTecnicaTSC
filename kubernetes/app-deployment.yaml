@@ -1,68 +1,108 @@
-name: CI/CD Docker Hub → EKS
-
-on:
-  push:
-    branches:
-      - main
-      - dev
-
-env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME || 'default-cluster-name' }}
-  DOCKER_IMAGE: pfalck/devopstest:latest  # Imagen pública en Docker Hub
-
-jobs:
-  ci:
-    name: CI - Test Application
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Ajusta si tu app no es Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
-
-  cd:
-    name: CD - Deploy to EKS
-    runs-on: ubuntu-latest
-    needs: ci
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
-      - name: Update kubeconfig for EKS
-        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
-
-      - name: Deploy Docker Hub image to EKS
-        run: |
-          # Valores extraídos de tu Deployment
-          DEPLOYMENT_NAME=devops-app-deployment
-          CONTAINER_NAME=devops-app-container
-          IMAGE=$DOCKER_IMAGE
-
-          kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$IMAGE
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
+# 4. Deployment (Despliegue con 2 Nodos/Réplicas)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-app-deployment
+  labels:
+    app: devops-app
+spec:
+  # Requisito: Balanceador de carga con al menos dos nodos (réplicas).
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: devops-app
+  template:
+    metadata:
+      labels:
+        app: devops-app
+    spec:
+      containers:
+      - name: devops-app-container
+        # Asegúrate de reemplazar con tu imagen de Docker Hub
+        image: pfalck/devopstest
+        ports:
+        - containerPort: 3000
+        env:
+          # --- Variables de ConfigMap (No Sensibles) ---
+          - name: NODE_ENV
+            value: production # Configuración de ambiente por defecto
+          - name: APP_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: APP_PORT
+          - name: ERR_GENERIC_METHOD
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: ERR_GENERIC_METHOD
+          - name: ERR_INVALID_AUTH
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: ERR_INVALID_AUTH
+          - name: ERR_MISSING_FIELDS
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: ERR_MISSING_FIELDS
+          - name: SUCCESS_GREETING
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: SUCCESS_GREETING
+          - name: SUCCESS_SUFFIX
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: SUCCESS_SUFFIX
+          - name: HOST
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: HOST
+          - name: ERR_MISSING_JWT
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: ERR_MISSING_JWT
+          - name: ERROR_TOKEN
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: ERROR_TOKEN
+          - name: TOKEN_DUPLICATE
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: TOKEN_DUPLICATE
+          # Variables de cabecera (cargadas consistentemente desde ConfigMap)
+          - name: HEADER_JWT
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: HEADER_JWT
+          - name: HEADER_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: devops-app-config
+                key: HEADER_KEY
+          # --- Variables de Secret (Sensibles) ---
+          - name: DEV_OPS_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: devops-app-secret
+                key: DEV_OPS_API_KEY
+          - name: JWT_TRANSACTION_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: devops-app-secret
+                key: JWT_TRANSACTION_SECRET
+        # Montar el PersistentVolumeClaim (si se utiliza)
+        volumeMounts:
+          - name: devops-app-storage
+            mountPath: /app/data # Punto de montaje dentro del contenedor
+      volumes:
+        - name: devops-app-storage
+          persistentVolumeClaim:
+            claimName: devops-app-pvc
