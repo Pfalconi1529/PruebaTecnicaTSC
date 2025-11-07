@@ -1,6 +1,3 @@
-
-#esta es la prueba
-
 name: CI/CD Docker + EKS
 
 on:
@@ -23,6 +20,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # --- INICIO DE LA SOLUCIÓN: CACHING DE NODE.JS ---
+      - name: Set up Node.js
+        # Usamos una acción para configurar Node.js, necesaria para el caching
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Ajusta esto a la versión real de tu aplicación
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          # Genera una clave única basada en el sistema operativo y el archivo de bloqueo (package-lock.json o yarn.lock)
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      
+      - name: Install Node.js dependencies
+        # Solo instala si la caché no se encontró (cache-hit no es true)
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: npm install
+      # --- FIN DE LA SOLUCIÓN: CACHING DE NODE.JS ---
+      
+      # --- MEJORA: Instalar Herramientas más rápido con Acciones ---
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -30,27 +50,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl apt-transport-https ca-certificates gnupg lsb-release
+      - name: Install eksctl
+        uses: s-yakubiv/setup-eksctl@v1
+      
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3 # Usamos una acción para instalar Kubectl de forma rápida.
 
-          # Docker official repo
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-          # eksctl
-          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-          sudo mv /tmp/eksctl /usr/local/bin
-          
-          # kubectl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
+      # NOTA: La instalación de Docker ya no es necesaria si solo haces build/push usando las acciones de Docker.
+      # Si necesitas Docker para pasos intermedios, considera usar la acción docker/setup-buildx-action
+      # o mantén los pasos de instalación manual si es estrictamente necesario.
 
       - name: Create EKS cluster if it doesn't exist
+        # ... (Resto del paso sin cambios)
         run: |
           if ! aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION >/dev/null 2>&1; then
             echo "Cluster $CLUSTER_NAME not found. Creating..."
@@ -79,6 +90,7 @@ jobs:
         run: docker push $DOCKER_REPO:$IMAGE_TAG
 
       - name: Deploy to EKS
+        # ... (Resto del paso sin cambios)
         run: |
           # Reemplaza el placeholder de la imagen si lo tienes
           find $K8S_DIR -type f -name "*.yaml" -exec sed -i "s|IMAGE_PLACEHOLDER|$DOCKER_REPO:$IMAGE_TAG|g" {} \;
