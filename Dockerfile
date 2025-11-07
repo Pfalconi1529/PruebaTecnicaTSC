@@ -13,4 +13,4 @@ COPY package.json package-lock.json ./
 RUN npm install --only=production  # solo dependencias necesarias
 COPY --from=builder /app/dist ./dist
 
-CMD ["node", "dist/app.js"]
+CMD ["node", "./dist/app.js"]
