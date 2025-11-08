@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main     
-      - develop  
+      - dev
 
 env:
   AWS_REGION: us-east-1
@@ -69,10 +69,6 @@ jobs:
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
-
-      # ==========================================================
-      # 🚨 CAMBIO AÑADIDO PARA SOLUCIONAR EL ERROR NAMESPACE NOT FOUND
-      # ==========================================================
       - name: Crear Namespace si no existe
         id: create_namespace
         run: |
@@ -80,7 +76,6 @@ jobs:
           # '|| true' garantiza que el workflow continúe si el namespace ya existe.
           kubectl create namespace ${{ env.KUBE_NAMESPACE }} || true
           echo "Namespace ${{ env.KUBE_NAMESPACE }} asegurado."
-      # ==========================================================
 
       - name: Build Docker image
         run: docker build -t $DOCKER_REPO:$IMAGE_TAG .
