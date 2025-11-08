@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: devops-app-pv
+  name: devops-app-pv-dev
   namespace: dev
   labels:
     type: local
@@ -17,12 +17,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: devops-app-pvc
+  name: devops-app-pvc-dev
   namespace: dev
   labels:
     app: devops-app
 spec:
-  storageClassName: manual
+  storageClassName: gp2
   accessModes:
     - ReadWriteOnce
   resources:

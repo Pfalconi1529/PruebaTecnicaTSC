@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops-app-deployment
+  name: devops-app-deployment-dev
   namespace: dev
   labels:
     app: devops-app
@@ -20,12 +20,12 @@ spec:
     spec:
       containers:
       - name: devops-app-container
-        image: pfalck/devopstest
+        image: IMAGE_PLACEHOLDER
         ports:
         - containerPort: 3000
         env:
         - name: NODE_ENV
-          value: production
+          value: development
         - name: APP_PORT
           valueFrom:
             configMapKeyRef:
@@ -103,7 +103,7 @@ spec:
       volumes:
       - name: devops-app-storage
         persistentVolumeClaim:
-          claimName: devops-app-pvc
+          claimName: devops-app-pvc-dev
       resources:
         limits:
           memory: "256Mi"
