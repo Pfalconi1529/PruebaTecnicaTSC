@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: devops-app-deployment
+  namespace: prod
   labels:
     app: devops-app
 spec:
@@ -10,10 +11,12 @@ spec:
   selector:
     matchLabels:
       app: devops-app
+      env: prod
   template:
     metadata:
       labels:
         app: devops-app
+        env: prod
     spec:
       containers:
       - name: devops-app-container
@@ -26,72 +29,72 @@ spec:
         - name: APP_PORT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: APP_PORT
         - name: ERR_GENERIC_METHOD
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: ERR_GENERIC_METHOD
         - name: ERR_INVALID_AUTH
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: ERR_INVALID_AUTH
         - name: ERR_MISSING_FIELDS
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: ERR_MISSING_FIELDS
         - name: SUCCESS_GREETING
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: SUCCESS_GREETING
         - name: SUCCESS_SUFFIX
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: SUCCESS_SUFFIX
         - name: HOST
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: HOST
         - name: ERR_MISSING_JWT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: ERR_MISSING_JWT
         - name: ERROR_TOKEN
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: ERROR_TOKEN
         - name: TOKEN_DUPLICATE
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: TOKEN_DUPLICATE
         - name: HEADER_JWT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: HEADER_JWT
         - name: HEADER_KEY
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-prod
               key: HEADER_KEY
         - name: DEV_OPS_API_KEY
           valueFrom:
             secretKeyRef:
-              name: devops-app-secret
+              name: devops-app-secret-prod
               key: DEV_OPS_API_KEY
         - name: JWT_TRANSACTION_SECRET
           valueFrom:
             secretKeyRef:
-              name: devops-app-secret
+              name: devops-app-secret-prod
               key: JWT_TRANSACTION_SECRET
         
         volumeMounts:
@@ -101,3 +104,10 @@ spec:
       - name: devops-app-storage
         persistentVolumeClaim:
           claimName: devops-app-pvc
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+        requests:
+          memory: "256Mi"
+          cpu: "250m"
