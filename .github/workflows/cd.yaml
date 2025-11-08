@@ -3,8 +3,8 @@ name: CI/CD Docker + EKS
 on:
   push:
     branches:
-      - main     # <--- Despliega a Producción
-      - develop  # <--- Despliega a Desarrollo
+      - main     
+      - develop  
 
 env:
   AWS_REGION: us-east-1
