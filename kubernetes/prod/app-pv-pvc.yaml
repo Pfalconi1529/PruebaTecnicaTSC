@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: devops-app-pvc
+  name: devops-app-pvc-prod
   namespace: prod
   labels:
     app: devops-app
