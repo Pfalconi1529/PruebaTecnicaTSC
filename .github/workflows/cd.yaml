@@ -3,8 +3,8 @@ name: CI/CD Docker + EKS
 on:
   push:
     branches:
-      - main     
-      - develop  
+      - main     # <--- Despliega a Producción
+      - develop  # <--- Despliega a Desarrollo
 
 env:
   AWS_REGION: us-east-1
@@ -19,9 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # ----------------------------------------------------------------------
-      # 💡 LÓGICA DE SELECCIÓN DE AMBIENTE (Dev vs. Prod)
-      # ----------------------------------------------------------------------
       - name: 🚀 Setear Variables de Ambiente (DEV/PROD)
         id: set_env
         run: |
@@ -31,22 +28,28 @@ jobs:
             echo "KUBE_NAMESPACE=prod" >> $GITHUB_ENV
             echo "KUBE_PATH=./kubernetes/prod" >> $GITHUB_ENV
             echo "IMAGE_TAG=prod" >> $GITHUB_ENV
-            echo "echo 'Iniciando despliegue de PRODUCCIÓN...'"
           else
             echo "KUBE_NAMESPACE=dev" >> $GITHUB_ENV
             echo "KUBE_PATH=./kubernetes/dev" >> $GITHUB_ENV
             echo "IMAGE_TAG=dev" >> $GITHUB_ENV
-            echo "echo 'Iniciando despliegue de DESARROLLO...'"
           fi
-        # Nota: La variable KUBE_PATH ahora apunta al directorio específico (prod o dev).
-      # ----------------------------------------------------------------------
 
-      - name: Set up Node.js y Cache
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18' 
 
+      - name: Cache Node.js modules
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+          
       - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
       - name: Configure AWS credentials
@@ -65,11 +68,21 @@ jobs:
           sudo mv kubectl /usr/local/bin/
 
       - name: Update kubeconfig
-        # Solo actualiza la configuración; asumimos que el clúster ya fue creado manualmente o en un pipeline anterior.
         run: aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
+      # ==========================================================
+      # 🚨 CAMBIO AÑADIDO PARA SOLUCIONAR EL ERROR NAMESPACE NOT FOUND
+      # ==========================================================
+      - name: Crear Namespace si no existe
+        id: create_namespace
+        run: |
+          # El comando intenta crear el namespace (ej. 'prod'). 
+          # '|| true' garantiza que el workflow continúe si el namespace ya existe.
+          kubectl create namespace ${{ env.KUBE_NAMESPACE }} || true
+          echo "Namespace ${{ env.KUBE_NAMESPACE }} asegurado."
+      # ==========================================================
+
       - name: Build Docker image
-        # Usa el TAG dinámico (dev o prod)
         run: docker build -t $DOCKER_REPO:$IMAGE_TAG .
 
       - name: Login to Docker Hub
@@ -79,14 +92,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        # Sube la imagen con el TAG dinámico
         run: docker push $DOCKER_REPO:$IMAGE_TAG
 
       - name: Deploy to EKS
         run: |
-          # 1. Reemplazar la imagen en el YAML del ambiente escogido
-          # Esto garantiza que el manifiesto apunte a la imagen con el tag correcto (:dev o :prod)
+          # 1. Reemplazar el placeholder de la imagen en los YAMLs
+          # Nota: Asegúrate de que tus YAMLs tengan IMAGE_PLACEHOLDER en el campo 'image'
           find ${{ env.KUBE_PATH }} -type f -name "*.yaml" -exec sed -i "s|IMAGE_PLACEHOLDER|$DOCKER_REPO:${{ env.IMAGE_TAG }}|g" {} \;
           
-          # 2. Aplicar los manifiestos del directorio específico al Namespace correcto
+          # 2. Aplicar los manifiestos al Namespace correcto
           kubectl apply -f ${{ env.KUBE_PATH }} -n ${{ env.KUBE_NAMESPACE }}
