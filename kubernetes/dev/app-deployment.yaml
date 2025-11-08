@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devops-app-deployment-prod
+  name: devops-app-deployment
   namespace: dev
   labels:
     app: devops-app
@@ -103,7 +103,7 @@ spec:
       volumes:
       - name: devops-app-storage
         persistentVolumeClaim:
-          claimName: devops-app-pvc-prod
+          claimName: devops-app-pvc
       resources:
         limits:
           memory: "256Mi"
