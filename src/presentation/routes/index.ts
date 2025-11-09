@@ -1,7 +1,4 @@
-/**
- * todo: Manejador de rutas
- */
-
+//index.ts
 import { Router } from "express";
 import { readdirSync } from "fs"
 import path from "path";
