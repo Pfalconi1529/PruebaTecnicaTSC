@@ -1,8 +1,9 @@
 # kubernetes/dev/01_configmap_dev.yaml
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: devops-app-config-dev # CORREGIDO: Nombre ÚNICO
+  name: devops-app-config-dev 
   namespace: dev
   labels:
     app: devops-app
