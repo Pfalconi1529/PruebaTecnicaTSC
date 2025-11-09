@@ -7,8 +7,8 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "target": "esnext",
     "lib": ["ES2022"],
@@ -46,5 +46,12 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "tests", 
+    "**/*.test.ts",
+    "dist"
+    ],
+
 }
