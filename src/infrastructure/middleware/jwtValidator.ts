@@ -8,16 +8,11 @@ import  jwt  from 'jsonwebtoken';
 const checkJwtTransaction = (req: Request, res: Response, next: NextFunction) => {
     
     const jwtToken = req.header(HEADER_JWT!);
-
-    console.log(jwtToken)
-    
-
     if (!jwtToken) {
         return res.status(403).send({ 
             message: ERR_MISSING_JWT
         });
     }
-
     try {
 
         const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET) as { jti: string, iat: number };

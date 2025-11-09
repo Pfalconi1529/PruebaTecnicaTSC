@@ -1,0 +1,17 @@
+// tsconfig.test.json (Verificado)
+{
+  "extends": "./tsconfig.json", 
+  "compilerOptions": {
+    "rootDir": "./", 
+    
+    "module": "NodeNext", 
+    "moduleResolution": "NodeNext",
+    
+    "types": ["node", "jest"],
+    "isolatedModules": true // La corrección para el error __filename
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts" 
+  ]
+}
