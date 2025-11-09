@@ -3,7 +3,6 @@ import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from
 import jwt from 'jsonwebtoken';
 const checkJwtTransaction = (req, res, next) => {
     const jwtToken = req.header(HEADER_JWT);
-    console.log(jwtToken);
     if (!jwtToken) {
         return res.status(403).send({
             message: ERR_MISSING_JWT
