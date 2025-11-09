@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -83,15 +83,7 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -101,60 +93,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as dotenv from 'dotenv';
-import type {Application}  from "express";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/app.ts (Refactorizado para ser probado)
+&nbsp;
+import type { Application } from "express";
 import express from 'express'
 import cors from "cors";
+// Asumiendo que estas son importaciones de la estructura de tu proyecto:
 import { router } from './presentation/routes/index.js';
 import { notFoundHandler } from './infrastructure/middleware/checkUrlOrHeader.js';
-import { ENVIRONMENT } from './infrastructure/context/envVariables.js';
+// import { ENVIRONMENT } from './infrastructure/context/envVariables.js'; // Ya no se necesita aquí
 &nbsp;
-// metodo pincipal donde aplico los cors las rutas y el manejador de archivos 
+export const app: Application = express(); // &lt;--- CRÍTICO: Exportamos la APP
 &nbsp;
+app.use(cors());
+app.use(express.json());
+app.use(router);
+app.use(notFoundHandler);
 &nbsp;
+// NOTA: El código de tu middleware de seguridad (API Key / JWT)
+// debería estar incluido dentro de tu `router` o como un middleware antes de `app.use(router);`
 &nbsp;
-<span class="cstat-no" title="statement not covered" >dotenv.config();</span>
-const PORT: number = <span class="cstat-no" title="statement not covered" >parseInt(process.env.APP_PORT || "3001");</span>
-const app: Application = <span class="cstat-no" title="statement not covered" >express();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >app.use(cors());</span>
-<span class="cstat-no" title="statement not covered" >app.use(express.json());</span>
-<span class="cstat-no" title="statement not covered" >app.use(router);</span>
-<span class="cstat-no" title="statement not covered" >app.use(notFoundHandler);</span>
-&nbsp;
-&nbsp;
-&nbsp;
-<span class="cstat-no" title="statement not covered" >console.log(`[${ENVIRONMENT.toUpperCase()}] Servidor iniciando...`);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  app.listen(PORT, <span class="fstat-no" title="function not covered" >() =</span>&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);</span>
-  });
-&nbsp;</pre></td></tr></table></pre>
+// Ya no hay `app.listen()` aquí.</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-30T04:15:37.277Z
+                at 2025-11-09T21:49:27.403Z
             </div>
         <script src="../prettify.js"></script>
         <script>
