@@ -5,6 +5,6 @@ import { checkHttpMethod } from '../../infrastructure/middleware/methodValidator
 import { checkApiKey } from '../../infrastructure/middleware/apiKeyValidator.js';
 import { checkJwtTransaction } from '../../infrastructure/middleware/jwtValidator.js';
 const router = Router();
-router.post('/devOps', checkJwtTransaction, checkHttpMethod, checkApiKey, postMessage);
+router.post('/devOps', checkHttpMethod, checkApiKey, checkJwtTransaction, postMessage);
 export { router };
 //# sourceMappingURL=devOpsRouter.js.map

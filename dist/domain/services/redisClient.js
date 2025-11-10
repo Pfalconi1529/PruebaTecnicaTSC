@@ -12,5 +12,12 @@ export const connectRedis = async () => {
         console.log('Redis conectado exitosamente.');
     }
 };
+// 🟢 FUNCIÓN AGREGADA
+export const disconnectRedis = async () => {
+    if (redisClient.isOpen) {
+        await redisClient.quit(); // Usamos quit para asegurar el cierre
+        console.log('Redis desconectado.');
+    }
+};
 export default redisClient;
 //# sourceMappingURL=redisClient.js.map

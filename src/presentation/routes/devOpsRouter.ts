@@ -10,7 +10,7 @@ import { checkJwtTransaction } from '../../infrastructure/middleware/jwtValidato
 const router = Router();
 
 router.post(
-  '/devOps',checkJwtTransaction,checkHttpMethod, checkApiKey,postMessage
+  '/devOps',checkHttpMethod, checkApiKey ,checkJwtTransaction, postMessage
 );
 
 export { router };

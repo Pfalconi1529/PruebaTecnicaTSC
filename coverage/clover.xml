@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1762744747782" clover="3.2.0">
-  <project timestamp="1762744747782" name="All files">
-    <metrics statements="86" coveredstatements="76" conditionals="26" coveredconditionals="17" methods="14" coveredmethods="11" elements="126" coveredelements="104" complexity="0" loc="86" ncloc="86" packages="8" files="13" classes="13"/>
+<coverage generated="1762769962521" clover="3.2.0">
+  <project timestamp="1762769962521" name="All files">
+    <metrics statements="119" coveredstatements="76" conditionals="48" coveredconditionals="18" methods="18" coveredmethods="7" elements="185" coveredelements="101" complexity="0" loc="119" ncloc="119" packages="9" files="15" classes="15"/>
     <package name="src">
       <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="app.ts" path="D:\devops-app\src\app.ts">
@@ -14,32 +14,49 @@
       </file>
     </package>
     <package name="src.domain.services">
-      <metrics statements="12" coveredstatements="10" conditionals="10" coveredconditionals="6" methods="1" coveredmethods="1"/>
+      <metrics statements="26" coveredstatements="7" conditionals="22" coveredconditionals="4" methods="5" coveredmethods="0"/>
       <file name="devOpsService.ts" path="D:\devops-app\src\domain\services\devOpsService.ts">
-        <metrics statements="12" coveredstatements="10" conditionals="10" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <metrics statements="12" coveredstatements="1" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="11" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="12" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="19" count="2" type="stmt"/>
-        <line num="21" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="26" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="27" count="2" type="stmt"/>
-        <line num="30" count="2" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+      </file>
+      <file name="redisClient.ts" path="D:\devops-app\src\domain\services\redisClient.ts">
+        <metrics statements="14" coveredstatements="6" conditionals="12" coveredconditionals="4" methods="4" coveredmethods="0"/>
+        <line num="3" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="4" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="31" count="2" type="stmt"/>
-        <line num="33" count="2" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.infrastructure.cache">
-      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="jwtCache.ts" path="D:\devops-app\src\infrastructure\cache\jwtCache.ts">
-        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="4" count="2" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
-        <line num="7" count="2" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
         <line num="10" count="2" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.infrastructure.context">
@@ -63,15 +80,15 @@
       </file>
     </package>
     <package name="src.infrastructure.middleware">
-      <metrics statements="21" coveredstatements="17" conditionals="8" coveredconditionals="6" methods="4" coveredmethods="3"/>
+      <metrics statements="40" coveredstatements="27" conditionals="18" coveredconditionals="9" methods="4" coveredmethods="3"/>
       <file name="apiKeyValidator.ts" path="D:\devops-app\src\infrastructure\middleware\apiKeyValidator.ts">
         <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="7" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
-        <line num="11" count="4" type="stmt"/>
-        <line num="12" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="4" falsecount="0"/>
         <line num="13" count="2" type="stmt"/>
-        <line num="17" count="2" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
       </file>
       <file name="checkUrlOrHeader.ts" path="D:\devops-app\src\infrastructure\middleware\checkUrlOrHeader.ts">
         <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -79,23 +96,42 @@
         <line num="6" count="0" type="stmt"/>
       </file>
       <file name="jwtValidator.ts" path="D:\devops-app\src\infrastructure\middleware\jwtValidator.ts">
-        <metrics statements="9" coveredstatements="7" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="10" count="4" type="stmt"/>
-        <line num="11" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="4" type="stmt"/>
+        <metrics statements="28" coveredstatements="17" conditionals="12" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="10" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="38" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
+        <line num="48" count="3" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
+        <line num="52" count="3" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="74" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="78" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="83" count="3" type="stmt"/>
+        <line num="84" count="3" type="stmt"/>
       </file>
       <file name="methodValidator.ts" path="D:\devops-app\src\infrastructure\middleware\methodValidator.ts">
         <metrics statements="4" coveredstatements="3" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="6" count="2" type="stmt"/>
-        <line num="8" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="8" count="5" type="cond" truecount="1" falsecount="1"/>
         <line num="9" count="0" type="stmt"/>
-        <line num="12" count="4" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
       </file>
     </package>
     <package name="src.infrastructure.utils">
@@ -103,10 +139,10 @@
       <file name="jwtGenerator.ts" path="D:\devops-app\src\infrastructure\utils\jwtGenerator.ts">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="8" count="2" type="stmt"/>
-        <line num="10" count="6" type="stmt"/>
-        <line num="12" count="6" type="stmt"/>
-        <line num="17" count="6" type="stmt"/>
-        <line num="23" count="6" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
       </file>
       <file name="utils.ts" path="D:\devops-app\src\infrastructure\utils\utils.ts">
         <metrics statements="3" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -116,15 +152,15 @@
       </file>
     </package>
     <package name="src.presentation.controllers">
-      <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="7" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="DevOpsController.ts" path="D:\devops-app\src\presentation\controllers\DevOpsController.ts">
-        <metrics statements="7" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="7" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="9" count="2" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="11" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="13" count="2" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
     </package>
@@ -149,6 +185,12 @@
         <line num="23" count="2" type="stmt"/>
         <line num="24" count="2" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="express.d.ts" path="D:\devops-app\src\types\express.d.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
   </project>
