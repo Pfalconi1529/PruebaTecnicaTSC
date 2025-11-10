@@ -54,6 +54,7 @@ jobs:
       
       - name: formatear codigo 
         run: | 
+          chmod +x ./node_modules/.bin/prettier
           ./node_modules/.bin/prettier --write "src/**/*.ts"
           git diff --exit-code || (echo "❌ Código no formateado. Ejecuta 'npm run format' antes de hacer commit." && exit 1)
       - name: Revision estatica de codigo linter
