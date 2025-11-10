@@ -25,6 +25,16 @@ spec:
         ports:
         - containerPort: 3000
         env:
+        - name:   REDIST_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: devops-app-config-dev
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: devops-app-config-dev
+              key: REDIS_PORT
         - name: NODE_ENV
           value: development
         - name: APP_PORT
