@@ -16,4 +16,4 @@ COPY --from=builder --chown=node:node /app/dist ./dist
 USER node
 ENV NODE_ENV=production
 
-CMD ["npm", "start"]
+CMD ["node", "./dist/server.js"]
