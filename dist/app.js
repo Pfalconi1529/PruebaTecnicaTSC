@@ -1,6 +1,6 @@
 // src/app.ts (Refactorizado para ser probado)
 import express from 'express';
-import cors from "cors";
+import cors from 'cors';
 // Asumiendo que estas son importaciones de la estructura de tu proyecto:
 import { router } from './presentation/routes/index.js';
 import { notFoundHandler } from './infrastructure/middleware/checkUrlOrHeader.js';

@@ -9,7 +9,7 @@
     "start": "node dist/server.js",
     "build": "tsc",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "lint": "eslint src/**/*.ts --fix"
+    "lint": "npx eslint src/**/*.ts --fix"
   },
   "keywords": [],
   "author": "",
