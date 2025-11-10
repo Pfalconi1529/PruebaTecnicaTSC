@@ -52,11 +52,14 @@ jobs:
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
+      - name: formatear codigo 
+        run: | 
+          npm run formt
+          git diff --exit-code || (echo "❌ Código no formateado. Ejecuta 'npm run format' antes de hacer commit." && exit 1)
       - name: Revision estatica de codigo linter
-        run: node ./node_modules/eslint/bin/eslint.js src/**/*.ts --fix
+        run: npm run lint
       - name: pruebas automaticas 
         run: npm run test
-      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:

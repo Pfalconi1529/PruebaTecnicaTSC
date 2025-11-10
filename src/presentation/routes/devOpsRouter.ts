@@ -4,16 +4,8 @@ import { checkJwtTransaction } from '../../infrastructure/middleware/jwtValidato
 import { checkHttpMethod } from '../../infrastructure/middleware/methodValidator.js';
 import { postMessage } from '../controllers/DevOpsController.js';
 
-
 const router = Router();
 
-router.post(
-  '/devOps',
-  checkHttpMethod,
-  checkApiKey,
-  checkJwtTransaction,
-  postMessage
-);
-
+router.post('/devOps', checkHttpMethod, checkApiKey, checkJwtTransaction, postMessage);
 
 export { router };
