@@ -89,7 +89,7 @@ spec:
         - name: DEV_OPS_API_KEY
           valueFrom:
             secretKeyRef:
-              name: devops-app-secret
+              name: devops-app-secret-dev
               key: DEV_OPS_API_KEY
         - name: JWT_TRANSACTION_SECRET
           valueFrom:
