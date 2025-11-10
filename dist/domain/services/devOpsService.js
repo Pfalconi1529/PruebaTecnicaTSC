@@ -1,6 +1,6 @@
 import { generateUniqueTransactionJwt } from '../../infrastructure/utils/jwtGenerator.js';
 import { isUsed, markAsUsed } from '../../infrastructure/cache/jwtCache.js';
-import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from '../../infrastructure/context/envVariables.js';
+import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE, } from '../../infrastructure/context/envVariables.js';
 // logica para el mensaje y las validaciones
 const responseMessage = (payload, transactionId) => {
     // ✅ Validación inicial de duplicado de token (antes de cualquier otra lógica)
@@ -13,7 +13,8 @@ const responseMessage = (payload, transactionId) => {
     }
     const { to } = payload;
     // ✅ Validación de campos requeridos
-    if (!to) { // Se asume que 'payload' siempre es un objeto por el tipado de la función
+    if (!to) {
+        // Se asume que 'payload' siempre es un objeto por el tipado de la función
         return { message: ERR_MISSING_FIELDS };
     }
     // ✅ Marcar como usado SOLAMENTE si las validaciones han pasado
@@ -25,7 +26,7 @@ const responseMessage = (payload, transactionId) => {
     const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
     return {
         message: successMessage,
-        newJwt: newToken
+        newJwt: newToken,
     };
 };
 export { responseMessage };
