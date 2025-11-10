@@ -2,7 +2,7 @@
 
 import * as dotenv from 'dotenv';
 import { app } from './app.js';
-import { connectRedis, disconnectRedis } from './domain/services/redisClient.js'; 
+
 import { ENVIRONMENT } from './infrastructure/context/envVariables.js'; 
 
 dotenv.config();
@@ -13,18 +13,14 @@ console.log(`[${ENVIRONMENT.toUpperCase()}] Servidor iniciando...`);
 
 const startServer = async () => {
     try {
-        // 1. CONEXIÓN A REDIS: Obligatorio antes de iniciar el servidor
-        await connectRedis(); 
-
-        // 2. Iniciar el servidor Express
         const server = app.listen(PORT, () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
 
         // Manejo de cierre (SIGTERM, SIGINT)
         const handleShutdown = async () => {
-            console.log('\n🛑 Recibida señal de cierre. Iniciando apagado...');
-            await disconnectRedis(); 
+
+
             server.close(() => {
                 console.log('Servidor Express cerrado.');
                 process.exit(0);

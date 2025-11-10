@@ -9,8 +9,6 @@ services:
       - .env
     environment:
       NODE_ENV: developer
-      REDIS_HOST: redis # 👈 Hostname de Redis
-      REDIS_PORT: 6379  # 👈 Puerto de Redis
     depends_on:
       - redis
     restart: always
