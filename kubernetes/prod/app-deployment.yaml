@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: devops-app-container
-        image: IMAGE_PLACEHOLDER #pfalck/devopstest
+        image: pfalck/devopstest:prod
         ports:
         - containerPort: 3000
         env:
