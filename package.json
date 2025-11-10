@@ -8,7 +8,7 @@
     "dev": "npm run build && node dist/server.js",
     "start": "node dist/server.js",
     "build": "tsc",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "npm run build && node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "npx eslint src/**/*.ts --fix"
   },
   "keywords": [],

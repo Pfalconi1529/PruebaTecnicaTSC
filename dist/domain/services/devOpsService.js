@@ -3,6 +3,7 @@ import { isUsed, markAsUsed } from '../../infrastructure/cache/jwtCache.js';
 import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from '../../infrastructure/context/envVariables.js';
 // logica para el mensaje y las validaciones
 const responseMessage = (payload, transactionId) => {
+    // ✅ Validación inicial de duplicado de token (antes de cualquier otra lógica)
     if (transactionId) {
         if (isUsed(transactionId)) {
             return {
@@ -11,12 +12,15 @@ const responseMessage = (payload, transactionId) => {
         }
     }
     const { to } = payload;
-    if (!payload || !to) {
+    // ✅ Validación de campos requeridos
+    if (!to) { // Se asume que 'payload' siempre es un objeto por el tipado de la función
         return { message: ERR_MISSING_FIELDS };
     }
+    // ✅ Marcar como usado SOLAMENTE si las validaciones han pasado
     if (transactionId) {
         markAsUsed(transactionId);
     }
+    // ✅ Llamada corregida: usa el valor por defecto de 60 segundos
     const newToken = generateUniqueTransactionJwt();
     const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
     return {

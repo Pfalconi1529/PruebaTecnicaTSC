@@ -10,9 +10,9 @@ const checkJwtTransaction = (req, res, next) => {
     try {
         const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET);
         req.transactionId = decoded.jti;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars    
     }
-    catch (_) {
+    catch (err) {
+        console.error("❌ JWT Verify error:", err);
         return res.status(401).send({ message: ERROR_TOKEN });
     }
     next();

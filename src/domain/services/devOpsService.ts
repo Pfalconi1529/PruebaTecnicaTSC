@@ -7,7 +7,7 @@ import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE }
 
 const responseMessage = (payload: MessagePayload, transactionId?: string): MessageResponse => { 
 
-    
+    // ✅ Validación inicial de duplicado de token (antes de cualquier otra lógica)
     if (transactionId) {
         if (isUsed(transactionId)) {
             return { 
@@ -18,16 +18,18 @@ const responseMessage = (payload: MessagePayload, transactionId?: string): Messa
     
     const { to } = payload; 
     
-    if (!payload || !to) { 
-    
+    // ✅ Validación de campos requeridos
+    if (!to) { // Se asume que 'payload' siempre es un objeto por el tipado de la función
         return { message: ERR_MISSING_FIELDS! }; 
     }
     
+    // ✅ Marcar como usado SOLAMENTE si las validaciones han pasado
     if (transactionId) {
         markAsUsed(transactionId);
     }
 
-    const newToken = generateUniqueTransactionJwt();
+    // ✅ Llamada corregida: usa el valor por defecto de 60 segundos
+    const newToken = generateUniqueTransactionJwt(); 
     const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
     
     return { 

@@ -1,11 +1,13 @@
-// src/server.ts 
+
+
+
 
 import * as dotenv from 'dotenv';
+dotenv.config();
 import { app } from './app.js';
-
 import { ENVIRONMENT } from './infrastructure/context/envVariables.js'; 
 
-dotenv.config();
+
 
 const PORT: number = parseInt(process.env.APP_PORT || '3001'); 
 
@@ -17,9 +19,7 @@ const startServer = async () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
 
-        // Manejo de cierre (SIGTERM, SIGINT)
         const handleShutdown = async () => {
-
 
             server.close(() => {
                 console.log('Servidor Express cerrado.');

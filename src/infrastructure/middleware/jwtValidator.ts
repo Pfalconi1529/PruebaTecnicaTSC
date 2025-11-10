@@ -7,7 +7,7 @@ interface RequestWithTransaction extends Request {
     transactionId?: string;
 }
 
-// Interfaz para el payload decodificado
+
 interface JwtPayload {
     jti: string; 
     iat: number;
@@ -15,21 +15,22 @@ interface JwtPayload {
 
 
 const checkJwtTransaction = (req: RequestWithTransaction, res: Response, next: NextFunction) => {
-    
-    const jwtToken = req.header(HEADER_JWT!);
+    const jwtToken = req.header(HEADER_JWT);
     if (!jwtToken) {
         return res.status(403).send({ 
             message: ERR_MISSING_JWT
         });
     }
+    
+    
 
     try {
-        const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET!) as JwtPayload;
         
-        
-        req.transactionId = decoded.jti; 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars    
-    } catch (_) {
+        const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET) as JwtPayload;
+        req.transactionId = decoded.jti 
+    
+    } catch (err) {
+        console.error("❌ JWT Verify error:", err);
         return res.status(401).send({ message: ERROR_TOKEN });
     }
 
