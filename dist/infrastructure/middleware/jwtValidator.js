@@ -1,4 +1,3 @@
-// validacion de jwt para las rutas 
 import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
 import jwt from 'jsonwebtoken';
 const checkJwtTransaction = (req, res, next) => {
@@ -11,8 +10,9 @@ const checkJwtTransaction = (req, res, next) => {
     try {
         const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET);
         req.transactionId = decoded.jti;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars    
     }
-    catch (error) {
+    catch (_) {
         return res.status(401).send({ message: ERROR_TOKEN });
     }
     next();
