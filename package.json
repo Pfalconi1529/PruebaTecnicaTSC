@@ -5,11 +5,11 @@
   "description": "",
   "main": "",
   "scripts": {
-    "dev": "npm run build && node dist/app.js",
-    "start": "node dist/app.js",
-    "build": "tsc",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
-  },
+  "dev": "npm run build && node dist/server.js", 
+  "start": "node dist/server.js", 
+  "build": "tsc",
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
