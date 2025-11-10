@@ -2293,5 +2293,6 @@ declare const redisClient: import("@redis/client").RedisClientType<{
     };
 } & import("redis").RedisModules, import("redis").RedisFunctions, import("redis").RedisScripts, import("redis").RespVersions, import("redis").TypeMapping>;
 export declare const connectRedis: () => Promise<void>;
+export declare const disconnectRedis: () => Promise<void>;
 export default redisClient;
 //# sourceMappingURL=redisClient.d.ts.map
