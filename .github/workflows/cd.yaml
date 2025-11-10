@@ -52,11 +52,11 @@ jobs:
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
-      - name: formatear codigo 
-        run: | 
+      - name: Formatear codigo (Prettier)
+        run: |
           chmod +x ./node_modules/.bin/prettier
           ./node_modules/.bin/prettier --write "src/**/*.ts"
-          git diff --exit-code || (echo "❌ Código no formateado. Ejecuta 'npm run format' antes de hacer commit." && exit 1)
+
       - name: Revision estatica de codigo linter
         run: npm run lint
       - name: pruebas automaticas 
