@@ -1,5 +1,6 @@
 Pasos para que funcione el app correctamente 
-1.- user esta ruta http://aacdfc4a207814ac4b0cb196c25084d5-1094501816.us-east-1.elb.amazonaws.com/devOpsRouter/devOps
+1.- Ruta prod 
+  aacdfc4a207814ac4b0cb196c25084d5-1094501816.us-east-1.elb.amazonaws.com/devOpsRouter/devOps
 2.- encabezado 
   - X-Parse-REST-API-Key: 2f5ae96c-b558-4c7b-a590-a501ae1c3f6c
   - Content-Type: application/json
@@ -14,3 +15,5 @@ Pasos para que funcione el app correctamente
 
 comando para crear el jwt inicial 
 node -r dotenv/config -e "import jwt from 'jsonwebtoken'; import { v4 as uuid } from 'uuid'; const secret=process.env.JWT_TRANSACTION_SECRET; const token=jwt.sign({ jti: uuid() }, secret, { expiresIn: '1h' }); console.log(token)" dotenv_config_path=./.env
+ruta para dev
+  a0288bbbc2eb9401cb4c22dd4607acd7-1283401425.us-east-1.elb.amazonaws.com/devOpsRouter/devOps
