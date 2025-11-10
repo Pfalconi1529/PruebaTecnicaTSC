@@ -1,0 +1,49 @@
+# Service para Redis (accesible por el host devops-redis-service-dev)
+apiVersion: v1
+kind: Service
+metadata:
+  name: devops-redis-service-dev 
+  namespace: dev
+  labels:
+    app: devops-redis
+    env: dev
+spec:
+  selector:
+    app: devops-redis
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP 
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-redis-deployment-dev
+  namespace: dev
+  labels:
+    app: devops-redis
+    env: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-redis
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: devops-redis
+        env: dev
+    spec:
+      containers:
+        - name: redis
+          image: redis:6-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
