@@ -1,88 +1,71 @@
 // src/infrastructure/middleware/jwtValidator.ts
 
+import type { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import type { Request, Response, NextFunction } from 'express'; 
-import { ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET, TOKEN_DUPLICATE } from '../context/envVariables.js';
-import redisClient from '../../domain/services/redisClient.js';
+import { 
+    HEADER_JWT, JWT_TRANSACTION_SECRET, ERROR_TOKEN, ERR_MISSING_JWT, TOKEN_DUPLICATE 
+} from '../context/envVariables.js';
+// 🚨 CRÍTICO: Importar las funciones de Redis (que Jest está mockeando)
+import { get, set } from '../../domain/services/redisClient.js'; 
 
-// ✅ CORRECCIÓN CRÍTICA 1 (RUNTIME/CJS-ESM): Desempaquetar el objeto para acceder a verify y sign.
-// Usamos este const para las llamadas a funciones.
-const jsonwebtokenExports = (jwt as any).default || jwt;
+// Este es el TTL por defecto, si no se encuentra en el payload
+const DEFAULT_TTL_SECONDS = 60; 
 
-// Desestructurar las clases de error del objeto *desempaquetado*
-const { JsonWebTokenError, TokenExpiredError } = jsonwebtokenExports; 
-
-interface RequestAugmented extends Request {
-    transactionId?: string;
-}
-
-// ✅ CORRECCIÓN CRÍTICA 2 (TYPESCRIPT): Usar el import 'jwt' para las definiciones de tipo (JwtPayload).
-interface JwtPayloadCustom extends jwt.JwtPayload {
-    jti: string;
-    iat: number;
-    exp: number;
-}
-
-
-const checkJwtTransaction = async (req: Request, res: Response, next: NextFunction) => {
-
-    const request = req as RequestAugmented;
-    
-    // 1. LECTURA DEL ENCABEZADO
-    const headerName = HEADER_JWT!.toLowerCase();
-    const headers = request.headers as unknown as { [key: string]: string | string[] | undefined };
-    const jwtToken = headers[headerName] as string | undefined; 
-
-    // console.log("esta es lo que viene en el jwt", jwtToken, "y esto es el header ", headers);
+// 🚨 La función DEBE ser asíncrona para usar await con Redis
+export const checkJwtTransaction = async (req: Request, res: Response, next: NextFunction) => {
+    // Es mejor acceder a headers directamente en Express, sin el tipo 'as string'
+    const jwtToken = req.headers[HEADER_JWT] as string | undefined;
 
     if (!jwtToken) {
-        return res.status(401).send({ 
-            message: ERROR_TOKEN
-        });
+        return res.status(403).send({ message: ERR_MISSING_JWT });
     }
 
     try {
-        // 2. VERIFICAR TOKEN (Usando el objeto desempaquetado)
-        const decoded = jsonwebtokenExports.verify(jwtToken, JWT_TRANSACTION_SECRET!) as JwtPayloadCustom;
+        // 1. Verificar y decodificar el token
+        const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET) as jwt.JwtPayload;
+        const jti = decoded.jti;
+        const exp = decoded.exp;
+
+        if (!jti) {
+            return res.status(400).send({ message: ERROR_TOKEN });
+        }
         
-        const transactionId = decoded.jti;
-        const expirationTime = decoded.exp;
-        
-        // 3. VERIFICAR BLACKLIST 
-        const isUsed = await redisClient.get(transactionId); 
-        
+        // 2. VERIFICACIÓN DE BLACKLIST (Llama a mockGet)
+        const isUsed = await get(jti); 
+
         if (isUsed) {
+            // Token duplicado: Aquí es donde debería fallar el test 409
             return res.status(409).send({ message: TOKEN_DUPLICATE });
         }
         
-        // 4. ESTABLECER TTL Y MARCAR COMO USADO 
-        const now = Math.floor(Date.now() / 1000);
-        const ttl = expirationTime - now;
-        
-        if (ttl > 0) {
-            await redisClient.set(transactionId, 'used', {
-                EX: ttl,
-            });
+        // 3. AGREGAR A LA BLACKLIST (Llama a mockSet)
+        let ttl = DEFAULT_TTL_SECONDS;
+        if (exp) {
+            // Calcular el TTL real basado en la expiración del token
+            ttl = exp - Math.floor(Date.now() / 1000);
+            if (ttl <= 0) {
+                return res.status(400).send({ message: ERROR_TOKEN });
+            }
         }
         
-        request.transactionId = transactionId; 
-        
-        next(); 
-    
+        // El TTL se calcula como el tiempo restante de vida del token
+        await set(jti, 'true', { EX: ttl }); 
+
+        next();
+
     } catch (error) {
-        // 5. MANEJO ESPECÍFICO DE ERRORES DE JWT
-        if (error instanceof TokenExpiredError) {
-             return res.status(401).send({ message: 'Token de transacción expirado.' });
-        }
-        
-        if (error instanceof JsonWebTokenError) {
+        // Manejo de errores de JWT (expiración, firma inválida, etc.)
+        if (error instanceof jwt.JsonWebTokenError) {
             return res.status(401).send({ message: ERROR_TOKEN });
+        } 
+        
+        // Este error solo ocurriría si el mock falla o si Redis real está caído
+        if (error instanceof Error && error.message.includes('ClientClosedError')) {
+            console.error('Error de Redis (ClientClosedError):', error);
+            return res.status(500).send({ message: 'Error interno de servidor. Problema de caché.' });
         }
 
-        // Error general
         console.error('Error no controlado en checkJwtTransaction:', error);
         return res.status(500).send({ message: 'Error interno de servidor.' });
     }
 };
-
-export { checkJwtTransaction };

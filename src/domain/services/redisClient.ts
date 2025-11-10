@@ -1,43 +1,75 @@
+// src/domain/services/redisClient.ts
+
 import { createClient } from 'redis';
+import type { RedisClientType } from 'redis'; 
 
-const redisHost = process.env.REDIS_HOST || 'localhost';
-const redisPort = parseInt(process.env.REDIS_PORT || '6379', 10);
+// Usamos las variables definidas por Docker Compose.
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = process.env.REDIS_PORT || '6379';
+const REDIS_URL = `redis://${REDIS_HOST}:${REDIS_PORT}`;
 
-// CAMBIO CRÍTICO: Usamos 'let' para reasignar si es necesario (ej. después de un cierre forzado)
-let redisClient = createClient({
-    url: `redis://${redisHost}:${redisPort}`
-});
+// 🚨 Inicialización diferida: el cliente es null al inicio.
+let redisClient: RedisClientType | null = null; 
 
-redisClient.on('error', (err) => console.error('Redis Client Error', err));
+export const connectRedis = async (): Promise<void> => {
+    if (redisClient) {
+        return;
+    }
 
-export const connectRedis = async () => {
-    // Si el cliente está cerrado (por un .quit() anterior), creamos una nueva instancia
-    if (!redisClient.isOpen && !redisClient.isReady) {
+    try {
         redisClient = createClient({
-            url: `redis://${redisHost}:${redisPort}`
+            url: REDIS_URL
+        }) as RedisClientType;
+
+        redisClient.on('error', (err) => {
+            console.error('Redis Client Error', err);
+            redisClient = null; 
         });
-        redisClient.on('error', (err) => console.error('Redis Client Error', err));
-    }
 
-    if (!redisClient.isOpen) {
         await redisClient.connect();
-        console.log('Redis conectado exitosamente.');
+        console.log(`Redis client connected successfully to ${REDIS_URL}.`);
+    } catch (error) {
+        console.error(`Failed to connect to Redis at ${REDIS_URL}:`, error);
+        if (redisClient) {
+            await redisClient.quit();
+        }
+        redisClient = null; 
+        // Relanzamos el error para que server.ts detenga el inicio
+        throw error; 
     }
 };
 
-// ----------------------------------------------------
-// CAMBIO CLAVE: Eliminamos await redisClient.quit() de la función exportada.
-// Esto detiene el cierre prematuro durante los tests.
-export const disconnectRedis = async () => {
-    if (redisClient.isOpen) {
-        // Quit() cierra el cliente, pero en Jest causa el ClientClosedError al usarlo
-        // en afterEach/afterAll. Dejamos que el proceso termine, o usamos 'quit()' solo en afterAll.
-        // Si ves el log "Redis desconectado" prematuramente, ESTA línea es el problema en los tests.
-        // Opcional: Volver a usar .quit() SOLO si estás seguro de que se llama una única vez en afterAll.
-        // await redisClient.quit(); // <--- Si tu test lo llama en afterEach, lo elimina
-        console.log('Redis desconectado.');
+export const disconnectRedis = async (): Promise<void> => {
+    if (redisClient && redisClient.isOpen) {
+        try {
+            await redisClient.quit();
+            console.log('Redis client disconnected.');
+        } catch (error) {
+            console.error('Error disconnecting Redis client:', error);
+        } finally {
+            redisClient = null;
+        }
     }
 };
-// ----------------------------------------------------
 
-export default redisClient;
+/**
+ * Obtiene el valor de una clave. Retorna string o null si no existe.
+ * 💡 Tipo de retorno corregido a Promise<string | null>.
+ */
+export const get = (key: string): Promise<string | null> => {
+    if (!redisClient || !redisClient.isOpen) {
+        throw new Error('ClientClosedError: The client is closed'); 
+    }
+    return redisClient.get(key); 
+};
+
+/**
+ * Establece el valor de una clave. Retorna Promise<string> (generalmente 'OK').
+ */
+export const set = (key: string, value: string, options: { EX: number }): Promise<string> => {
+    if (!redisClient || !redisClient.isOpen) {
+        throw new Error('ClientClosedError: The client is closed');
+    }
+    // Aseguramos que solo se devuelva string, ya que Redis devuelve 'OK'
+    return redisClient.set(key, value, options) as Promise<string>;
+};

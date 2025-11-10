@@ -1,11 +1,11 @@
 // src/domain/services/__mocks__/redisClient.js
+
 import { jest } from '@jest/globals';
 
-// Define las funciones mockeadas
-export const get = jest.fn().mockResolvedValue(null); 
-export const set = jest.fn().mockResolvedValue('OK'); 
+// Mocks de las funciones de datos
+export const get = jest.fn().mockResolvedValue(null);
+export const set = jest.fn().mockResolvedValue('OK');
 
-export const connectRedis = jest.fn().mockResolvedValue(true); 
-export const disconnectRedis = jest.fn().mockResolvedValue(undefined); 
-
-export const __esModule = true;
+// Mocks de las funciones de conexión (no hacen nada)
+export const connectRedis = jest.fn().mockResolvedValue(undefined);
+export const disconnectRedis = jest.fn().mockResolvedValue(undefined);
