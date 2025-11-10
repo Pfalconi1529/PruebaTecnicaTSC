@@ -4,15 +4,15 @@
 const DEV_OPS_API_KEY = process.env.DEV_OPS_API_KEY; 
 const ERR_GENERIC_METHOD = process.env.ERR_GENERIC_METHOD; 
 const ERR_INVALID_AUTH = process.env.ERR_INVALID_AUTH; 
-const ERR_MISSING_FIELDS = process.env.ERR_MISSING_FIELDS || " "; 
+const ERR_MISSING_FIELDS = process.env.ERR_MISSING_FIELDS || ' '; 
 const SUCCESS_GREETING = process.env.SUCCESS_GREETING;
 const SUCCESS_SUFFIX = process.env.SUCCESS_SUFFIX;
-const ERR_MISSING_JWT = process.env.ERR_MISSING_JWT
-const HEADER_JWT = process.env.HEADER_JWT || "";
+const ERR_MISSING_JWT = process.env.ERR_MISSING_JWT;
+const HEADER_JWT = process.env.HEADER_JWT || '';
 const JWT_TRANSACTION_SECRET = process.env.JWT_TRANSACTION_SECRET!;
-const ERROR_TOKEN = process.env.ERROR_TOKEN
-const TOKEN_DUPLICATE = process.env.TOKEN_DUPLICATE
-const HEADER_KEY = process.env.HEADER_KEY
+const ERROR_TOKEN = process.env.ERROR_TOKEN;
+const TOKEN_DUPLICATE = process.env.TOKEN_DUPLICATE;
+const HEADER_KEY = process.env.HEADER_KEY;
 const ENVIRONMENT = process.env.NODE_ENV || 'unknown';
 const HOST = process.env.HOST!;
 

@@ -1,11 +1,20 @@
-// validacion de jwt para las rutas 
 
 import type { Request, Response, NextFunction } from 'express';
 import { ERR_MISSING_JWT, ERROR_TOKEN, HEADER_JWT, JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
-import  jwt  from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+
+interface RequestWithTransaction extends Request {
+    transactionId?: string;
+}
+
+// Interfaz para el payload decodificado
+interface JwtPayload {
+    jti: string; 
+    iat: number;
+}
 
 
-const checkJwtTransaction = (req: Request, res: Response, next: NextFunction) => {
+const checkJwtTransaction = (req: RequestWithTransaction, res: Response, next: NextFunction) => {
     
     const jwtToken = req.header(HEADER_JWT!);
     if (!jwtToken) {
@@ -13,11 +22,14 @@ const checkJwtTransaction = (req: Request, res: Response, next: NextFunction) =>
             message: ERR_MISSING_JWT
         });
     }
-    try {
 
-        const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET) as { jti: string, iat: number };
-        (req as any).transactionId = decoded.jti; 
-    } catch (error) {
+    try {
+        const decoded = jwt.verify(jwtToken, JWT_TRANSACTION_SECRET!) as JwtPayload;
+        
+        
+        req.transactionId = decoded.jti; 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars    
+    } catch (_) {
         return res.status(401).send({ message: ERROR_TOKEN });
     }
 
