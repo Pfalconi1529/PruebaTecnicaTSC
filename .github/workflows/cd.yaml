@@ -53,7 +53,7 @@ jobs:
         run: npm install
       
       - name: Revision estatica de codigo linter
-        run: ./node_modules/.bin/eslint src/**/*.ts --fix
+        run: node ./node_modules/eslint/bin/eslint.js src/**/*.ts --fix
       - name: pruebas automaticas 
         run: npm run test
       
