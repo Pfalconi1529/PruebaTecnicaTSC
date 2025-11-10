@@ -1,26 +1,18 @@
-// genera el jwt 
-
 import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuid } from 'uuid';
 import { JWT_TRANSACTION_SECRET } from '../context/envVariables.js';
 
+export const generateUniqueTransactionJwt = (timeToLifeSec: number = 60): string => {
+  if (!JWT_TRANSACTION_SECRET) {
+    throw new Error('JWT_TRANSACTION_SECRET no está configurado.');
+  }
+  const payload = {
+    jti: uuid(),
+  };
 
-const generateUniqueTransactionJwt = (): string => {
+  const token = jwt.sign(payload, JWT_TRANSACTION_SECRET, {
+    expiresIn: `${timeToLifeSec}s`,
+  });
 
-    const transactionId = uuidv4(); 
-
-    const payload = {
-        jti: transactionId, 
-        iat: Date.now(),    
-    };
-
-    const token = jwt.sign(
-        payload, 
-        JWT_TRANSACTION_SECRET,
-        { expiresIn: '60m' } 
-    );
-    
-    return token;
+  return token;
 };
-
-export { generateUniqueTransactionJwt };

@@ -18,3 +18,5 @@ data:
   ERROR_TOKEN: "Token de transacción inválido o expirado."
   TOKEN_DUPLICATE: "Este token de transacción ya fue utilizado."
   HEADER_KEY: "x-parse-rest-api-key"
+  REDIS_HOST: "devops-redis-service" 
+  REDIS_PORT: "6379"

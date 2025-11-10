@@ -52,11 +52,16 @@ jobs:
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
+      - name: Revision estatica de codigo (ESLint)
+        run: |
+          chmod +x ./node_modules/.bin/eslint
+          ./node_modules/.bin/eslint "src/**/*.ts" --fix
+
+
       - name: Revision estatica de codigo linter
-        run: node ./node_modules/eslint/bin/eslint.js src/**/*.ts --fix
+        run: npm run lint
       - name: pruebas automaticas 
         run: npm run test
-      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:

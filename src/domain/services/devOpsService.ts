@@ -1,39 +1,46 @@
 import type { MessagePayload, MessageResponse } from '../interfaces/devOpsInterface.ts';
-import { generateUniqueTransactionJwt } from '../../infrastructure/utils/jwtGenerator.js'; 
+import { generateUniqueTransactionJwt } from '../../infrastructure/utils/jwtGenerator.js';
 import { isUsed, markAsUsed } from '../../infrastructure/cache/jwtCache.js';
-import { ERR_MISSING_FIELDS, SUCCESS_GREETING, SUCCESS_SUFFIX, TOKEN_DUPLICATE } from '../../infrastructure/context/envVariables.js';
+import {
+  ERR_MISSING_FIELDS,
+  SUCCESS_GREETING,
+  SUCCESS_SUFFIX,
+  TOKEN_DUPLICATE,
+} from '../../infrastructure/context/envVariables.js';
 
 // logica para el mensaje y las validaciones
 
-const responseMessage = (payload: MessagePayload, transactionId?: string): MessageResponse => { 
+const responseMessage = (payload: MessagePayload, transactionId?: string): MessageResponse => {
+  // ✅ Validación inicial de duplicado de token (antes de cualquier otra lógica)
+  if (transactionId) {
+    if (isUsed(transactionId)) {
+      return {
+        message: TOKEN_DUPLICATE!,
+      };
+    }
+  }
 
-    
-    if (transactionId) {
-        if (isUsed(transactionId)) {
-            return { 
-                message: TOKEN_DUPLICATE!,
-            }; 
-        }
-    }
-    
-    const { to } = payload; 
-    
-    if (!payload || !to) { 
-    
-        return { message: ERR_MISSING_FIELDS! }; 
-    }
-    
-    if (transactionId) {
-        markAsUsed(transactionId);
-    }
+  const { to } = payload;
 
-    const newToken = generateUniqueTransactionJwt();
-    const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
-    
-    return { 
-        message: successMessage!,
-        newJwt: newToken 
-    }; 
+  // ✅ Validación de campos requeridos
+  if (!to) {
+    // Se asume que 'payload' siempre es un objeto por el tipado de la función
+    return { message: ERR_MISSING_FIELDS! };
+  }
+
+  // ✅ Marcar como usado SOLAMENTE si las validaciones han pasado
+  if (transactionId) {
+    markAsUsed(transactionId);
+  }
+
+  // ✅ Llamada corregida: usa el valor por defecto de 60 segundos
+  const newToken = generateUniqueTransactionJwt();
+  const successMessage = `${SUCCESS_GREETING}${to}${SUCCESS_SUFFIX}`;
+
+  return {
+    message: successMessage!,
+    newJwt: newToken,
+  };
 };
 
 export { responseMessage };

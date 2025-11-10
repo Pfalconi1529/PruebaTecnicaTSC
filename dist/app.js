@@ -10,7 +10,4 @@ app.use(cors());
 app.use(express.json());
 app.use(router);
 app.use(notFoundHandler);
-// NOTA: El código de tu middleware de seguridad (API Key / JWT)
-// debería estar incluido dentro de tu `router` o como un middleware antes de `app.use(router);`
-// Ya no hay `app.listen()` aquí.
 //# sourceMappingURL=app.js.map
