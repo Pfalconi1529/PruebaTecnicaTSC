@@ -29,72 +29,72 @@ spec:
         - name: APP_PORT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: APP_PORT
         - name: ERR_GENERIC_METHOD
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: ERR_GENERIC_METHOD
         - name: ERR_INVALID_AUTH
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: ERR_INVALID_AUTH
         - name: ERR_MISSING_FIELDS
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: ERR_MISSING_FIELDS
         - name: SUCCESS_GREETING
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: SUCCESS_GREETING
         - name: SUCCESS_SUFFIX
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: SUCCESS_SUFFIX
         - name: HOST
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: HOST
         - name: ERR_MISSING_JWT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: ERR_MISSING_JWT
         - name: ERROR_TOKEN
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: ERROR_TOKEN
         - name: TOKEN_DUPLICATE
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: TOKEN_DUPLICATE
         - name: HEADER_JWT
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: HEADER_JWT
         - name: HEADER_KEY
           valueFrom:
             configMapKeyRef:
-              name: devops-app-config
+              name: devops-app-config-dev
               key: HEADER_KEY
         - name: DEV_OPS_API_KEY
           valueFrom:
             secretKeyRef:
-              name: devops-app-secret
+              name: devops-app-secret-dev
               key: DEV_OPS_API_KEY
         - name: JWT_TRANSACTION_SECRET
           valueFrom:
             secretKeyRef:
-              name: devops-app-secret
+              name: devops-app-secret-dev
               key: JWT_TRANSACTION_SECRET
         
         volumeMounts:
