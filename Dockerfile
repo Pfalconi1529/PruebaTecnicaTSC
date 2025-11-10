@@ -1,4 +1,4 @@
-#Dockerfile en multistage
+#Dockerfile en 
 
 FROM node:20-alpine AS builder
 WORKDIR /app
@@ -16,4 +16,4 @@ COPY --from=builder --chown=node:node /app/dist ./dist
 USER node
 ENV NODE_ENV=production
 
-CMD ["node", "./dist/server.js"]
+CMD ["npm", "start"]
