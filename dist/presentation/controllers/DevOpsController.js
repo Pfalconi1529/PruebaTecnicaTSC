@@ -1,4 +1,4 @@
-// controlador para la respuesta 
+// controlador para la respuesta
 import { responseMessage } from '../../domain/services/devOpsService.js';
 import { handleHttp } from '../../infrastructure/utils/utils.js';
 const postMessage = async (req, res) => {

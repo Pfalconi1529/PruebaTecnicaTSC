@@ -9,7 +9,6 @@ const startServer = async () => {
         const server = app.listen(PORT, () => {
             console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
         });
-        // Manejo de cierre (SIGTERM, SIGINT)
         const handleShutdown = async () => {
             server.close(() => {
                 console.log('Servidor Express cerrado.');
