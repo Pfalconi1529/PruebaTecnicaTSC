@@ -52,10 +52,11 @@ jobs:
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm install
       
-      - name: Formatear codigo (Prettier)
+      - name: Revision estatica de codigo (ESLint)
         run: |
-          chmod +x ./node_modules/.bin/prettier
-          ./node_modules/.bin/prettier --write "src/**/*.ts"
+          chmod +x ./node_modules/.bin/eslint
+          ./node_modules/.bin/eslint "src/**/*.ts" --fix
+
 
       - name: Revision estatica de codigo linter
         run: npm run lint
