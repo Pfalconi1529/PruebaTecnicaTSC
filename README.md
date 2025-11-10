@@ -11,3 +11,6 @@ Pasos para que funcione el app correctamente
 "from": "Rita Asturia", 
 "timeToLifeSec" : 45
 }
+
+comando para crear el jwt inicial 
+node -r dotenv/config -e "import jwt from 'jsonwebtoken'; import { v4 as uuid } from 'uuid'; const secret=process.env.JWT_TRANSACTION_SECRET; const token=jwt.sign({ jti: uuid() }, secret, { expiresIn: '1h' }); console.log(token)" dotenv_config_path=./.env
